@@ -31,7 +31,29 @@
   </div>
 
   <script>
-    // Set the date for Slapsgiving (example: Nov 27, 2025 at 12:00 PM)
+    async function checkPassword() {
+      const password = document.getElementById("passwordInput").value;
+      const error = document.getElementById("error");
+
+      const res = await fetch("/.netlify/functions/checkPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("countdownContainer").classList.remove("hidden");
+        startCountdown();
+      } else {
+        error.textContent = "Incorrect password!";
+      }
+    }
+
+    
+    // Set the date for the countdown(example: Nov 27, 2025 at 12:00 PM)
     const slapsgivingDate = new Date("Sep 1, 2025 12:00:00").getTime();
 
     const timer = document.getElementById("timer");

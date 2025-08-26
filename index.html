@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Slapsgiving Countdown</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: black;
+      color: red;
+      font-family: 'Courier New', monospace;
+      font-size: 4rem;
+    }
+    .countdown {
+      text-align: center;
+    }
+    .label {
+      font-size: 2rem;
+      color: white;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <div id="timer"></div>
+    <div class="label">until Slapsgiving</div>
+  </div>
+
+  <script>
+    // Set the date for Slapsgiving (example: Nov 27, 2025 at 12:00 PM)
+    const slapsgivingDate = new Date("Nov 27, 2025 12:00:00").getTime();
+
+    const timer = document.getElementById("timer");
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = slapsgivingDate - now;
+
+      if (distance <= 0) {
+        timer.innerHTML = "SLAP TIME!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      timer.innerHTML = 
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    };
+
+    updateCountdown(); // run once immediately
+    setInterval(updateCountdown, 1000); // update every second
+  </script>
+</body>
+</html>

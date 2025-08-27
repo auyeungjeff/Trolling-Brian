@@ -55,28 +55,36 @@
     <div class="label">until Slapsgiving</div>    //Make sure to change this later
   </div>
 
-  <script>
-    async function checkPassword() {
-      const password = document.getElementById("passwordInput").value;
-      const error = document.getElementById("error");
+ <script>
+  const passwordInput = document.getElementById("passwordInput");
 
-      const res = await fetch("/.netlify/functions/checkPassword", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("countdownContainer").classList.remove("hidden");
-        startCountdown();
-      } else {
-        error.textContent = "Incorrect password!";
-      }
+  // Trigger submit when Enter key is pressed
+  passwordInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      checkPassword();
     }
+  });
 
+  async function checkPassword() {
+    const password = passwordInput.value;
+    const error = document.getElementById("error");
+
+    const res = await fetch("/.netlify/functions/checkPassword", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("countdownContainer").classList.remove("hidden");
+      startCountdown();
+    } else {
+      error.textContent = "Incorrect password!";
+    }
+  }
     
     function startCountdown() {
       const slapsgivingDate = new Date("Sept 1, 2025 12:00:00").getTime();
@@ -105,5 +113,6 @@
   </script>
 </body>
 </html>
+
 
 

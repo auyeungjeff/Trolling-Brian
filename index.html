@@ -1,93 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Slapsgiving Countdown</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: black;
-      color: red;
-      font-family: 'Courier New', monospace;
-      font-size: 4rem;
+      font-family: Arial, sans-serif;
       text-align: center;
-    }
-    .label {
-      font-size: 2rem;
+      background-color: black;
       color: white;
-      margin-top: 1rem;
     }
-    .hidden {
+    #videoContainer {
       display: none;
+      margin-top: 20px;
     }
-    input, button {
-      padding: 10px;
-      font-size: 1rem;
-      margin: 10px;
-    }
-    button {
-      background: red;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: darkred;
+    video {
+      max-width: 90%;
+      max-height: 80vh;
     }
   </style>
 </head>
 <body>
-  <!-- Password Form -->
+  <h1>Slapsgiving Countdown</h1>
+  <div id="timer"></div>
+
   <div id="login">
-    <h2 style="color:white;">Enter Password</h2>
+    <p>Enter password to unlock video early:</p>
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Submit</button>
-    <p id="error" style="color:white;font-size:1rem;"></p>
+    <p id="error" style="color:red;"></p>
   </div>
 
-  <!-- Countdown -->
-  <div id="countdownContainer" class="hidden">
-    <div id="timer"></div>
-    <div class="label">until Slapsgiving</div>    //Make sure to change this later
+  <div id="videoContainer">
+    <h2>It's Slap Time!</h2>
+    <video controls autoplay>
+      <source src="your-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 
- <script>
-  const passwordInput = document.getElementById("passwordInput");
-
-  // Trigger submit when Enter key is pressed
-  passwordInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      checkPassword();
-    }
-  });
-
-  async function checkPassword() {
-    const password = passwordInput.value;
-    const error = document.getElementById("error");
-
-    const res = await fetch("/.netlify/functions/checkPassword", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password })
+  <script>
+    const passwordInput = document.getElementById("passwordInput");
+    passwordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkPassword();
+      }
     });
 
-    const data = await res.json();
+    async function checkPassword() {
+      const password = passwordInput.value;
+      const error = document.getElementById("error");
 
-    if (data.success) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("countdownContainer").classList.remove("hidden");
-      startCountdown();
-    } else {
-      error.textContent = "Incorrect password!";
+      const res = await fetch("/.netlify/functions/checkPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        showVideo();
+      } else {
+        error.textContent = "Incorrect password!";
+      }
     }
-  }
-    
+
     function startCountdown() {
-      const slapsgivingDate = new Date("Sept 1, 2025 12:00:00").getTime();
+      const slapsgivingDate = new Date("Nov 27, 2025 12:00:00").getTime();
       const timer = document.getElementById("timer");
 
       function updateCountdown() {
@@ -95,7 +74,7 @@
         const distance = slapsgivingDate - now;
 
         if (distance <= 0) {
-          timer.innerHTML = "SLAP TIME!";
+          showVideo();
           return;
         }
 
@@ -110,9 +89,14 @@
       updateCountdown();
       setInterval(updateCountdown, 1000);
     }
+
+    function showVideo() {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("timer").style.display = "none";
+      document.getElementById("videoContainer").style.display = "block";
+    }
+
+    startCountdown();
   </script>
 </body>
 </html>
-
-
-

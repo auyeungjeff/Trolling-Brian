@@ -20,11 +20,11 @@
   </style>
 </head>
 <body>
-  <h1>Slapsgiving Countdown</h1>
+  <h1>Who's Tom's Big Bro?</h1>
   <div id="timer"></div>
 
   <div id="login">
-    <p>Enter password to unlock video early:</p>
+    <p>Unless you know who it is:</p>
     <input type="password" id="passwordInput" placeholder="Password">
     <button onclick="checkPassword()">Submit</button>
     <p id="error" style="color:red;"></p>
@@ -33,7 +33,7 @@
   <div id="videoContainer">
     <h2>It's Slap Time!</h2>
     <video controls autoplay>
-      <source src="your-video.mp4" type="video/mp4">
+      <source src="WednesdaysCancelled.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
@@ -66,7 +66,7 @@
     }
 
     function startCountdown() {
-      const slapsgivingDate = new Date("Nov 27, 2025 12:00:00").getTime();
+      const slapsgivingDate = new Date("Sep 1, 2025 12:00:00").getTime();
       const timer = document.getElementById("timer");
 
       function updateCountdown() {
@@ -100,3 +100,4 @@
   </script>
 </body>
 </html>
+

@@ -5,14 +5,44 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       background-color: black;
       color: white;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
     }
+    
+    #countdown {
+      font-size: 5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    
+    #password-section input {
+      padding: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .password-image {
+      display: block;        /* So margin auto works */
+      margin: 20px auto 0;   /* Space above + center horizontally */
+      max-width: 90%;        /* Scale to screen width */
+      height: auto;          /* Keep proportions */
+    }
+    
+    #password-section button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+    }
+    
     #videoContainer {
       display: none;
       margin-top: 20px;
     }
+    
     video {
       max-width: 90%;
       max-height: 80vh;
@@ -24,10 +54,14 @@
   <h1>Who's Tom's Big Bro?</h1>
   <div id="countdown"></div>
 
+  <!-- This is a comment in HTML -->
+  <!-- Add in the style="display:none;" -->
   <div id="password-section">
     <input type="password" id="password" placeholder="Enter password" />
     <button onclick="checkPassword()">Submit</button>
     <p id="error" style="color:red; display:none;">Incorrect password</p>
+
+    <img src="IMG_1633.jpg" alt="Description of image" class="password-image">
   </div>
 
   <div id="video-section" style="display:none;">
@@ -84,6 +118,7 @@
   </script>
 </body>
 </html>
+
 
 
 

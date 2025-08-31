@@ -19,22 +19,18 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Who's Tom's Big Bro?</h1>
-  <div id="timer"></div>
+  <div id="countdown"></div>
 
-  <div id="login">
-    <!-- Check this tomorrow -->
-    <h1>Find out when the counter is over!</h1>
-    <p>Unless you know who it is:</p>
-    <p>Type in their name here</p>
-    <p>No spaces. All lower.</p>
-    <input type="password" id="passwordInput" placeholder="Password">
+  <div id="password-section">
+    <input type="password" id="password" placeholder="Enter password" />
     <button onclick="checkPassword()">Submit</button>
-    <p id="error" style="color:red;"></p>
+    <p id="error" style="color:red; display:none;">Incorrect password</p>
   </div>
 
-  <div id="videoContainer">
+  <div id="video-section" style="display:none;">
     <h2>AIN'T NO WAY!! -Rissien's little Bro</h2>
     <video controls autoplay>
       <source src="HQJackyFinal.mp4" type="video/mp4">
@@ -42,68 +38,53 @@
     </video>
   </div>
 
-  <script>
-    const passwordInput = document.getElementById("passwordInput");
-    passwordInput.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkPassword();
+   <script>
+    const targetDate = new Date("Sep 2, 2025 21:00:00 GMT-0700").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("password-section").style.display = "block";
+        clearInterval(countdownInterval);
+        return;
       }
-    });
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    let countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
 
     async function checkPassword() {
-      const password = passwordInput.value;
-      const error = document.getElementById("error");
+      const password = document.getElementById("password").value;
 
-      const res = await fetch("/.netlify/functions/checkPassword", {
+      // Call Netlify function to verify password
+      const response = await fetch("/.netlify/functions/checkPassword", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password }),
       });
+      const result = await response.json();
 
-      const data = await res.json();
-
-      if (data.success) {
-        showVideo();
+      if (result.success) {
+        document.getElementById("password-section").style.display = "none";
+        document.getElementById("video-section").style.display = "block";
       } else {
-        error.textContent = "Incorrect password!";
+        document.getElementById("error").style.display = "block";
       }
     }
-
-    function startCountdown() {
-      const slapsgivingDate = new Date("Sep 2, 2025 21:00:00 GMT-0700").getTime();
-      const timer = document.getElementById("timer");
-
-      function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = slapsgivingDate - now;
-
-        if (distance <= 0) {
-          showVideo();
-          return;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        timer.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      }
-
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    }
-
-    function showVideo() {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("timer").style.display = "none";
-      document.getElementById("videoContainer").style.display = "block";
-    }
-
-    startCountdown();
   </script>
 </body>
 </html>
+
 
 
 

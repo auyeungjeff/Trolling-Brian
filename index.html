@@ -116,13 +116,15 @@
     async function checkPassword() {
       const password = document.getElementById("password").value;
 
+      console.log("Submitting password:", password);
+      
       // Call Netlify function to verify password
       const response = await fetch("/.netlify/functions/checkPassword", {
         method: "POST",
         body: JSON.stringify({ password }),
       });
       const result = await response.json();
-
+      console.log("Password check result:", result);
 
       if (result.success) {
         storedPassword = password;
@@ -135,8 +137,12 @@
 
 
     async function loadProtectedContent() {
+      console.log("Loading protected content with password:", storedPassword);
+      
       // Load protected video
       const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
+      console.log("Video fetch status:", videoRes.status);
+      
       if (videoRes.ok) {
         const videoBlob = await videoRes.blob();
         document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
@@ -144,6 +150,9 @@
     
         // Show button to go to image page
         document.getElementById("view-image-btn").style.display = "inline-block";
+      }
+      else {
+        console.error("Video fetch failed.");
       }
     }
     
@@ -156,6 +165,7 @@
   </script>
 </body>
 </html>
+
 
 
 

@@ -139,20 +139,21 @@
     async function loadProtectedContent() {
       console.log("Loading protected content with password:", storedPassword);
       
-      // Load protected video
-      const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
-      console.log("Video fetch status:", videoRes.status);
+      try {
+        console.log("Fetching video with password:", storedPassword);
+        const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
+        console.log("Video fetch status:", videoRes.status);
       
-      if (videoRes.ok) {
-        const videoBlob = await videoRes.blob();
-        document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
-        document.getElementById("protected-video").style.display = "block";
-    
-        // Show button to go to image page
-        document.getElementById("view-image-btn").style.display = "inline-block";
-      }
-      else {
-        console.error("Video fetch failed.");
+        if (videoRes.ok) {
+          const videoBlob = await videoRes.blob();
+          document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
+          document.getElementById("protected-video").style.display = "block";
+          document.getElementById("view-image-btn").style.display = "inline-block";
+        } else {
+          console.error("Video fetch failed with status:", videoRes.status);
+        }
+      } catch (err) {
+        console.error("Error fetching video:", err);
       }
     }
     
@@ -165,6 +166,7 @@
   </script>
 </body>
 </html>
+
 
 
 

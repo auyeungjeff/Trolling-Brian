@@ -38,12 +38,9 @@
       font-size: 1.2rem;
     }
     
-    #videoContainer {
+    #protected-video {
       display: none;
       margin-top: 20px;
-    }
-    
-    video {
       max-width: 90%;
       max-height: 80vh;
     }
@@ -72,6 +69,9 @@
     </video>
   </div>
 
+  <img id="protected-image" alt="Protected image">
+  <video id="protected-video" controls autoplay></video>
+  
    <script>
     const targetDate = new Date("Sep 2, 2025 21:00:00 GMT-0700").getTime();
 
@@ -98,6 +98,14 @@
     let countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
+    document.addEventListener("keydown", function(event) {
+      if (event.key.toLowerCase() === "e") {
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("password-section").style.display = "block";
+        clearInterval(countdownInterval);
+      }
+    });
+
     async function checkPassword() {
       const password = document.getElementById("password").value;
 
@@ -108,16 +116,37 @@
       });
       const result = await response.json();
 
+
       if (result.success) {
+        storedPassword = password;
         document.getElementById("password-section").style.display = "none";
-        document.getElementById("video-section").style.display = "block";
+        loadProtectedContent();
       } else {
         document.getElementById("error").style.display = "block";
+      }
+    }
+
+    async function loadProtectedContent() {
+      // Load protected image
+      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(storedPassword)}`);
+      if (imageRes.ok) {
+        const imageBlob = await imageRes.blob();
+        document.getElementById("protected-image").src = URL.createObjectURL(imageBlob);
+        document.getElementById("protected-image").style.display = "block";
+      }
+
+      // Load protected video
+      const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
+      if (videoRes.ok) {
+        const videoBlob = await videoRes.blob();
+        document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
+        document.getElementById("protected-video").style.display = "block";
       }
     }
   </script>
 </body>
 </html>
+
 
 
 

@@ -63,6 +63,8 @@
     <input type="password" id="password-input" placeholder="Submit answer here">
     <button id="password-submit">Submit</button>
   </div>
+
+  <div id="error">You don't know the real big bro is</div>
   
   <div id="video-container" style="display: none;">
     <video id="myVideo" controls autoplay style="max-width: 100%;">
@@ -78,6 +80,9 @@
   
    <script>
     const targetDate = new Date("Sep 2, 2025 21:00:00 GMT-0700").getTime();
+    const submitButton = document.getElementById("password-submit");
+    const passwordInput = document.getElementById("password-input");
+    let storedPassword = "";
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -111,7 +116,7 @@
     });
 
     async function checkPassword() {
-      const password = document.getElementById("password").value;
+      const password = document.getElementById("password-input").value;
 
       console.log("Submitting password:", password);
       
@@ -126,7 +131,7 @@
       if (result.success) {
         storedPassword = password;
         document.getElementById("password-section").style.display = "none";
-        loadProtectedContent();
+        showVideo();
       } else {
         document.getElementById("error").style.display = "block";
       }
@@ -160,6 +165,7 @@
   </script>
 </body>
 </html>
+
 
 
 

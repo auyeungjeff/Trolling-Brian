@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 
-export async function handler(event) {
+exports.handler = async (event) => {
 
   console.log("getVideo function called");
   
@@ -47,6 +47,7 @@ export async function handler(event) {
     return { statusCode: 500, body: "Error reading video" };
   }
 }
+
 
 
 

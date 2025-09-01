@@ -5,11 +5,11 @@ import path from "path";
 export async function handler(event) {
   const { password } = event.queryStringParameters;
 
+  console.log("Password received:", password);
+
   if (password !== process.env.SECRET_PASSWORD) {
-    return {
-      statusCode: 403,
-      body: "Forbidden"
-    };
+    console.log("Wrong password");
+    return { statusCode: 403, body: "Forbidden" };
   }
 
   const videoPath = path.resolve(__dirname, "../../protected/HQJackyFinal.mp4");
@@ -33,4 +33,5 @@ export async function handler(event) {
     return { statusCode: 500, body: "Error reading video" };
   }
 }
+
 

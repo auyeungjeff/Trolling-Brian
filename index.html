@@ -83,6 +83,9 @@
 
   <img id="protected-image" alt="Protected image">
   <video id="protected-video" controls autoplay></video>
+  <button id="view-image-btn" style="display:none; margin-top:20px;" onclick="goToImagePage()">
+  And I'm just saying
+</button>
   
    <script>
     const targetDate = new Date("Sep 2, 2025 21:00:00 GMT-0700").getTime();
@@ -138,26 +141,30 @@
       }
     }
 
-    async function loadProtectedContent() {
-      // Load protected image
-      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(storedPassword)}`);
-      if (imageRes.ok) {
-        const imageBlob = await imageRes.blob();
-        document.getElementById("protected-image").src = URL.createObjectURL(imageBlob);
-        document.getElementById("protected-image").style.display = "block";
-      }
 
+    async function loadProtectedContent() {
       // Load protected video
       const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
       if (videoRes.ok) {
         const videoBlob = await videoRes.blob();
         document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
         document.getElementById("protected-video").style.display = "block";
+    
+        // Show button to go to image page
+        document.getElementById("view-image-btn").style.display = "inline-block";
       }
     }
+    
+    function goToImagePage() {
+      // Pass password via sessionStorage so next page can fetch image
+      sessionStorage.setItem("videoPassword", storedPassword);
+      window.location.href = "image.html";
+    }
+
   </script>
 </body>
 </html>
+
 
 
 

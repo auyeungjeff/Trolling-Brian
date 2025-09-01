@@ -12,7 +12,7 @@ export async function handler(event) {
     };
   }
 
-  const imagePath = path.join(process.cwd(), "protected", "myimage.jpg");
+  const imagePath = path.join(process.cwd(), "protected", "IMG_1633.jpg");
 
   try {
     const imageBuffer = fs.readFileSync(imagePath);
@@ -32,3 +32,4 @@ export async function handler(event) {
     };
   }
 }
+

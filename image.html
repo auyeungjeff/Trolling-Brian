@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Protected Image</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    img {
+      max-width: 90%;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Protected Image</h1>
+  <img id="protected-image" alt="Protected image">
+
+  <script>
+    async function loadImage() {
+      const password = sessionStorage.getItem("videoPassword");
+
+      // If no password, send them back to index.html
+      if (!password) {
+        window.location.replace("index.html");
+        return;
+      }
+
+      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
+      if (imageRes.ok) {
+        const imageBlob = await imageRes.blob();
+        document.getElementById("protected-image").src = URL.createObjectURL(imageBlob);
+      } else {
+        // If wrong password or expired session, send them back silently
+        window.location.replace("index.html");
+      }
+    }
+
+    loadImage();
+  </script>
+</body>
+</html>

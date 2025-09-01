@@ -60,11 +60,12 @@
   <div id="countdown"></div>
 
   <div id="password-section">
-    <input type="password" id="password-input" placeholder="Submit answer here">
+    <input type="password" id="password-input" placeholder="Who do you think is Tom's Big Bro">
     <button id="password-submit">Submit</button>
+    <p class="hint-text">All lower, no spaces.</p>
   </div>
 
-  <div id="error">You don't know the real big bro is</div>
+  <div id="error">Wrong. You don't know the real big bro is</div>
   
   <div id="video-container" style="display: none;">
     <video id="myVideo" controls autoplay style="max-width: 100%;">
@@ -146,6 +147,10 @@
         checkPassword();
       }
     }); 
+     
+    passwordInput.addEventListener("input", () => {
+      document.getElementById("error").style.display = "none";
+    });
 
 
     function showVideo() {
@@ -154,6 +159,7 @@
       const video = document.getElementById("myVideo");
       video.src = videoFileName;
       videoContainer.style.display = "block";
+      view-image-btn.style.display = "block";
     }
     
     function goToImagePage() {
@@ -165,6 +171,7 @@
   </script>
 </body>
 </html>
+
 
 
 

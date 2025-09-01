@@ -12,23 +12,25 @@ export async function handler(event) {
     };
   }
 
-  const videoPath = path.join(process.cwd(), "protected", "HQJackyFinal.mp4");
+  const videoPath = path.resolve(__dirname, "../../protected/HQJackyFinal.mp4");
+  console.log("Looking for video at:", videoPath);
 
   try {
+    const stats = fs.statSync(videoPath);
+    console.log("Video size:", stats.size, "bytes");
+
     const videoBuffer = fs.readFileSync(videoPath);
+    console.log("Video read successfully");
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "video/mp4"
-      },
+      headers: { "Content-Type": "video/mp4" },
       body: videoBuffer.toString("base64"),
       isBase64Encoded: true
     };
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: "Error reading video"
-    };
+    console.error("Error reading video:", err);
+    return { statusCode: 500, body: "Error reading video" };
   }
 }
+

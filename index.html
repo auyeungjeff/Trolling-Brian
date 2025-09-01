@@ -21,16 +21,30 @@
       margin-bottom: 20px;
     }
     
+    #password-section {
+      display: none;
+    }
+
     #password-section input {
       padding: 10px;
       font-size: 1.2rem;
     }
-    
-    .password-image {
-      display: block;        /* So margin auto works */
-      margin: 20px auto 0;   /* Space above + center horizontally */
-      max-width: 90%;        /* Scale to screen width */
-      height: auto;          /* Keep proportions */
+
+    #password-section button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+    }
+
+    #error {
+      color: red;
+      display: none;
+    }
+
+    #protected-image {
+      display: none;
+      margin-top: 20px;
+      max-width: 90%;
+      height: auto;
     }
     
     #password-section button {
@@ -146,6 +160,7 @@
   </script>
 </body>
 </html>
+
 
 
 

@@ -64,16 +64,19 @@
   <h1>Who's Tom's Big Bro?</h1>
   <div id="countdown"></div>
 
-  <!-- This is a comment in HTML -->
-  <!-- Add in the style="display:none;" -->
   <div id="password-section">
-    <input type="password" id="password" placeholder="Enter password" />
-    <button onclick="checkPassword()">Submit</button>
-    <p id="error" style="color:red; display:none;">Incorrect password</p>
+    
+    <input type="password" id="password-input" placeholder="Submit answer here">
+    <button id="password-submit">Submit</button>
   </div>
-
-  <img id="protected-image" alt="Protected image">
-  <video id="protected-video" controls autoplay style="display:none;"></video>
+  
+  <div id="video-container" style="display: none;">
+    <video id="myVideo" controls autoplay style="max-width: 100%;">
+      <source src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  
   <button id="view-image-btn" style="display:none; margin-top:20px;" onclick="goToImagePage()">
    And I'm just sayin'
   </button>
@@ -135,26 +138,23 @@
       }
     }
 
-
-    async function loadProtectedContent() {
-      console.log("Loading protected content with password:", storedPassword);
-      
-      try {
-        console.log("Fetching video with password:", storedPassword);
-        const videoRes = await fetch(`/.netlify/functions/getVideo?password=${encodeURIComponent(storedPassword)}`);
-        console.log("Video fetch status:", videoRes.status);
-      
-        if (videoRes.ok) {
-          const videoBlob = await videoRes.blob();
-          document.getElementById("protected-video").src = URL.createObjectURL(videoBlob);
-          document.getElementById("protected-video").style.display = "block";
-          document.getElementById("view-image-btn").style.display = "inline-block";
-        } else {
-          console.error("Video fetch failed with status:", videoRes.status);
-        }
-      } catch (err) {
-        console.error("Error fetching video:", err);
+    // Click handler
+    submitButton.addEventListener("click", checkPassword);
+    
+    // Allow pressing Enter key
+    passwordInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        checkPassword();
       }
+    }); 
+
+
+    function showVideo() {
+      const videoFileName = "HQJackyFinal.mp4"
+      const videoContainer = document.getElementById("video-container");
+      const video = document.getElementById("myVideo");
+      video.src = videoFileName;
+      videoContainer.style.display = "block";
     }
     
     function goToImagePage() {
@@ -166,6 +166,7 @@
   </script>
 </body>
 </html>
+
 
 
 

@@ -7,9 +7,10 @@ exports.handler = async (event) => {
 
     // Secret password stored in Netlify environment variables
     const secretPassword = process.env.SECRET_PASSWORD;
+    const secretPassword2 = process.env.SECRET_PASSWORD_ALT;
 
     // Compare entered password with the secret
-    if (password === secretPassword) {
+    if (password === secretPassword|| password === secretPassword2) {
       return {
         statusCode: 200,
         body: JSON.stringify({ success: true }),

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Get Ready :)</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,83 +16,95 @@
       align-items: center;
       flex-direction: column;
     }
-    
+
     #countdown {
       font-size: 5rem;
       font-weight: bold;
       margin-bottom: 20px;
     }
-    
+
+    /* Small password box, top right */
     #password-section {
-      display: none;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 10px;
+      border-radius: 6px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      z-index: 1000;
     }
 
     #password-section input {
-      padding: 10px;
-      font-size: 1.2rem;
+      padding: 5px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
     }
 
     #password-section button {
-      padding: 10px 20px;
-      font-size: 1.2rem;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
     #error {
+      position: fixed;
+      top: 55px;
+      right: 20px;
       color: red;
       display: none;
-    }
-
-    #protected-video {
-      margin-top: 20px;
-      max-width: 90%;
-      max-height: 80vh;
+      z-index: 1000;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 
 <body>
+
   <h1>Are You Ready?</h1>
   <div id="countdown"></div>
-   <h1>Can you feel the darkness coming?</h1>
-    <p>It's going to be a lot of fun.  <span style="font-size: 100px;">😎👍</span> </p>
-  </div>
+  <h1>Can you feel the darkness coming?</h1>
+  <p>It's going to be a lot of fun. <span style="font-size: 100px;">😎👍</span></p>
 
+  <!-- Small password box always visible -->
   <div id="password-section">
-    <input type="password" id="password-input" placeholder="Who's Tom's Big Bro">
-    <button id="password-submit">Submit</button>
-    <p class="hint-text">Full name, all lower, no spaces.</p>
+    <input type="password" id="password-input" placeholder="password">
+    <button id="password-submit">Go</button>
   </div>
 
-  <div id="error">Wrong. Try again. Or you don't know how to spell their names.
-  </div>
-  
-  <div id="video-container" style="display: none;">
-    <video id="myVideo" controls autoplay style="max-width: 100%;">
-      <source src="" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  
-  <button id="view-image-btn" style="display:none; margin-top:20px;" onclick="goToImagePage()">
-   And I'll admit as well
-  </button>
+  <div id="error">Wrong password.</div>
 
-  
-   <script>
+  <script>
+    const redirectPage = "reveal.html"; // <-- change to the page you want
+
+    // Countdown target
     const targetDate = new Date("Nov 21, 2025 19:30:00 GMT-0700").getTime();
+
     const submitButton = document.getElementById("password-submit");
     const passwordInput = document.getElementById("password-input");
-    let storedPassword = "";
+
+    let redirectTriggered = false;
+
+    function triggerRedirect() {
+      if (redirectTriggered) return; // Prevent double-redirects
+      redirectTriggered = true;
+
+      document.getElementById("countdown").style.display = "none";
+      document.getElementById("password-section").style.display = "none";
+      document.getElementById("error").style.display = "none";
+
+      window.location.href = redirectPage;
+    }
 
     function updateCountdown() {
-      const now = new Date().getTime();
+      const now = Date.now();
       const distance = targetDate - now;
 
       if (distance <= 0) {
-        document.getElementById("countdown").style.display = "none";
-        document.getElementById("password-section").style.display = "block";
-        document.title = "It's Jacky";
         clearInterval(countdownInterval);
+        triggerRedirect();
         return;
       }
 
@@ -106,91 +119,36 @@
 
     let countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
-     
-    async function checkPassword() {
-      const password = document.getElementById("password-input").value;
 
-      console.log("Submitting password:", password);
-      
-      // Call Netlify function to verify password
+
+    async function checkPassword() {
+      const password = passwordInput.value.trim();
+
       const response = await fetch("/.netlify/functions/checkPassword", {
         method: "POST",
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password })
       });
+
       const result = await response.json();
-      console.log("Password check result:", result);
 
       if (result.success) {
-        storedPassword = password;
-        document.getElementById("password-section").style.display = "none";
-        showVideo();
+        triggerRedirect();
       } else {
         document.getElementById("error").style.display = "block";
       }
     }
 
-    // Click handler
     submitButton.addEventListener("click", checkPassword);
-    
-    // Allow pressing Enter key
-    passwordInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        checkPassword();
-      }
-    }); 
-     
+
+    passwordInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") checkPassword();
+    });
+
     passwordInput.addEventListener("input", () => {
       document.getElementById("error").style.display = "none";
     });
 
-
-    function showVideo() {
-      const videoFileName = "HQJackyFinal.mp4"
-      const videoContainer = document.getElementById("video-container");
-      const video = document.getElementById("myVideo");
-      video.src = videoFileName;
-      videoContainer.style.display = "block";
-      document.getElementById("view-image-btn").style.display = "block";
-    }
-    
-    function goToImagePage() {
-      // Pass password via sessionStorage so next page can fetch image
-      sessionStorage.setItem("videoPassword", storedPassword);
-      window.location.href = "image.html";
-    }
-
   </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

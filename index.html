@@ -66,9 +66,10 @@
 
   <!-- Small password box always visible -->
   <div id="password-section">
-    <input type="password" id="password-input" placeholder="password">
-    <button id="password-submit">Go</button>
+    <input type="password" id="password-input" placeholder="">
   </div>
+
+<div id="error">Wrong password.</div>
 
   <div id="error">Wrong password.</div>
 
@@ -78,7 +79,6 @@
     // Countdown target
     const targetDate = new Date("Nov 21, 2025 19:30:00 GMT-0700").getTime();
 
-    const submitButton = document.getElementById("password-submit");
     const passwordInput = document.getElementById("password-input");
 
     let redirectTriggered = false;
@@ -134,10 +134,10 @@
       }
     }
 
-    submitButton.addEventListener("click", checkPassword);
-
     passwordInput.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") checkPassword();
+      if (e.key === "Enter") {
+        checkPassword();
+      }
     });
 
     passwordInput.addEventListener("input", () => {
@@ -148,5 +148,6 @@
 
 </body>
 </html>
+
 
 

@@ -106,15 +106,7 @@
 
     let countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key.toLowerCase() === "e") {
-        document.getElementById("countdown").style.display = "none";
-        document.getElementById("password-section").style.display = "block";
-        clearInterval(countdownInterval);
-      }
-    });
-
+     
     async function checkPassword() {
       const password = document.getElementById("password-input").value;
 
@@ -170,6 +162,7 @@
   </script>
 </body>
 </html>
+
 
 
 

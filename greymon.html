@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>The Reveal</title>
+
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+    }
+
+    #reveal-image {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 10px;
+      display: none; /* hidden until fully loaded */
+    }
+  </style>
+</head>
+
+<body>
+
+  <img id="reveal-image" src="surprise.png" alt="Reveal Image">
+
+  <audio id="reveal-sound" src="surprise.mp3"></audio>
+
+  <script>
+    const img = document.getElementById("reveal-image");
+    const sound = document.getElementById("reveal-sound");
+
+    // When the image finishes loading, show it and then play sound after delay
+    img.onload = () => {
+      img.style.display = "block";
+
+      // Play sound after 3 seconds
+      setTimeout(() => {
+        sound.play().catch(() => {
+          // If autoplay fails (e.g., browser blocks it), user must tap
+          alert("Tap to enable sound");
+        });
+      }, 3000);
+    };
+
+    // Trigger image loading (in case browser needs explicit start)
+    img.src = img.src;
+  </script>
+
+</body>
+</html>

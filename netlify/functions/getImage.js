@@ -4,7 +4,9 @@ import path from "path";
 
 export async function handler(event) {
   const { password } = event.queryStringParameters;
-
+  console.log("Password received:", password);
+  console.log("Expected:", process.env.SEC_PASS_GREYMON);
+  
   if (password !== process.env.SEC_PASS_GREYMON) {
     return {
       statusCode: 403,
@@ -26,12 +28,14 @@ export async function handler(event) {
       isBase64Encoded: true
     };
   } catch (err) {
+    console.error("Error reading image:", err);
     return {
       statusCode: 500,
       body: "Error reading image"
     };
   }
 }
+
 
 
 

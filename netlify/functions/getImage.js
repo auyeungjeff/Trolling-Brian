@@ -5,7 +5,7 @@ import path from "path";
 export async function handler(event) {
   const { password } = event.queryStringParameters;
 
-  if (password !== process.env.SECRET_PASSWORD) {
+  if (password !== process.env.SEC_PASS_GREYMON) {
     return {
       statusCode: 403,
       body: "Forbidden"
@@ -32,6 +32,7 @@ export async function handler(event) {
     };
   }
 }
+
 
 
 

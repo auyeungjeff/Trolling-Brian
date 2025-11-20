@@ -32,14 +32,6 @@
 
   <script>
     async function loadImage() {
-      const password = sessionStorage.getItem("videoPassword");
-
-      // If no password, send them back to index.html
-      if (!password) {
-        window.location.replace("index.html");
-        return;
-      }
-
       const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
 
       if (imageRes.ok) {
@@ -59,6 +51,10 @@
           }, 3000);
         };
 
+      }
+      else{
+        console.error("Image fetch failed — wrong password or server error.");
+        window.location.replace("index.html");
       }
     }
 

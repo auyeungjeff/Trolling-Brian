@@ -1,57 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>The Reveal</title>
-
+  <title>CRINGE</title>
   <style>
     body {
       background-color: black;
       color: white;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
+      text-align: center;
       font-family: Arial, sans-serif;
     }
-
-    #reveal-image {
+    img {
       max-width: 90%;
-      max-height: 90vh;
-      border-radius: 10px;
-      display: none; /* hidden until fully loaded */
+      max-height: 70%;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      overflow: auto;
+      position: fixed;
+      right: 0;
+      top: 0;
+      object-fit: contain;
     }
   </style>
 </head>
-
 <body>
+  <h1>WELCOME TO GREYMON NIGHT</h1>
+  <img id="protected-image" alt="Protected image">
 
-  <img id="reveal-image" src="surprise.png" alt="Reveal Image">
-
-  <audio id="reveal-sound" src="surprise.mp3"></audio>
+  <!-- ADDED: audio file -->
+  <audio id="reveal-sound" src="sound.mp3"></audio>
 
   <script>
-    const img = document.getElementById("reveal-image");
-    const sound = document.getElementById("reveal-sound");
+    async function loadImage() {
+      const password = sessionStorage.getItem("videoPassword");
 
-    // When the image finishes loading, show it and then play sound after delay
-    img.onload = () => {
-      img.style.display = "block";
+      // If no password, send them back to index.html
+      if (!password) {
+        window.location.replace("index.html");
+        return;
+      }
 
-      // Play sound after 3 seconds
-      setTimeout(() => {
-        sound.play().catch(() => {
-          // If autoplay fails (e.g., browser blocks it), user must tap
-          alert("Tap to enable sound");
-        });
-      }, 3000);
-    };
+      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
 
-    // Trigger image loading (in case browser needs explicit start)
-    img.src = img.src;
+      if (imageRes.ok) {
+        const imageBlob = await imageRes.blob();
+        const imgElem = document.getElementById("protected-image");
+        imgElem.src = URL.createObjectURL(imageBlob);
+
+        // ADDED: when the image loads, play sound after 3 seconds
+        imgElem.onload = () => {
+          setTimeout(() => {
+            const sound = document.getElementById("reveal-sound");
+
+            sound.play().catch(() => {
+              // If the browser blocks autoplay
+              console.log("Sound blocked; user interaction needed.");
+            });
+          }, 3000);
+        };
+
+      } else {
+        // If wrong password or expired session, send them back silently
+        window.location.replace("index.html");
+      }
+    }
+
+    loadImage();
   </script>
-
 </body>
 </html>

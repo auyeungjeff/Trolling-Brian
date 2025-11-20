@@ -2,17 +2,20 @@
 import fs from "fs";
 import path from "path";
 
+const validPasswords = [
+  process.env.SEC_PASS_GREYMON,
+  process.env.COUNTDOWN_UNLOCK_PASSWORD
+];
+
 export async function handler(event) {
   const { password } = event.queryStringParameters;
-  console.log("Password received:", password);
-  console.log("Expected:", process.env.SEC_PASS_GREYMON);
   
-  if (password !== process.env.SEC_PASS_GREYMON) {
-    return {
-      statusCode: 403,
-      body: "Forbidden"
-    };
-  }
+  if (!validPasswords.includes(password)) {
+  return {
+    statusCode: 403,
+    body: "Forbidden"
+  };
+}
 
   const imagePath = path.join(process.cwd(), "protected", "Greymon1.jpg");
 
@@ -35,6 +38,7 @@ export async function handler(event) {
     };
   }
 }
+
 
 
 

@@ -32,6 +32,9 @@
 
   <script>
     async function loadImage() {
+    
+      const password = sessionStorage.getItem("videoPassword");
+      
       console.log("Loading Image.");
       const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
       console.log("Should have gone through the netlify function");

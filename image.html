@@ -30,14 +30,6 @@
 
   <script>
     async function loadImage() {
-      const password = sessionStorage.getItem("videoPassword");
-
-      // If no password, send them back to index.html
-      if (!password) {
-        window.location.replace("index.html");
-        return;
-      }
-
       const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
       if (imageRes.ok) {
         const imageBlob = await imageRes.blob();
@@ -52,6 +44,7 @@
   </script>
 </body>
 </html>
+
 
 
 

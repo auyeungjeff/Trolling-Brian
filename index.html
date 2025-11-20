@@ -86,7 +86,12 @@
     function triggerRedirect() {
       if (redirectTriggered) return; // Prevent double-redirects
       redirectTriggered = true;
-
+      
+      // If user did not enter a password manually, set a fallback
+      if (!sessionStorage.getItem("videoPassword")) {
+        sessionStorage.setItem("videoPassword", "COUNTDOWN_UNLOCK");
+      }
+      
       document.getElementById("countdown").style.display = "none";
       document.getElementById("password-section").style.display = "none";
       document.getElementById("error").style.display = "none";
@@ -128,6 +133,7 @@
       const result = await response.json();
 
       if (result.success) {
+        sessionStorage.setItem("videoPassword", password);
         triggerRedirect();
       } else {
         document.getElementById("error").style.display = "block";
@@ -148,6 +154,7 @@
 
 </body>
 </html>
+
 
 
 

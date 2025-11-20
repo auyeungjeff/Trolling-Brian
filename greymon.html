@@ -32,7 +32,9 @@
 
   <script>
     async function loadImage() {
+      console.log("Loading Image.");
       const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
+      console.log("Should have gone through the netlify function");
 
       if (imageRes.ok) {
         const imageBlob = await imageRes.blob();

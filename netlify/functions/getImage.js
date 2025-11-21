@@ -1,23 +1,30 @@
-// netlify/functions/getImage.js
 import fs from "fs";
 import path from "path";
 
-const validPasswords = [
-  process.env.SEC_PASS_GREYMON,
-  process.env.COUNTDOWN_UNLOCK_PASSWORD
-];
-
 export async function handler(event) {
-  const { password } = event.queryStringParameters;
-  
-  if (!validPasswords.includes(password)) {
-  return {
-    statusCode: 403,
-    body: "Forbidden"
-  };
-}
+  const { password, file } = event.queryStringParameters;
 
-  const imagePath = path.join(process.cwd(), "protected", "Greymon1.jpg");
+  const validPasswords = [
+    process.env.SEC_PASS_GREYMON,
+    process.env.COUNTDOWN_UNLOCK_PASSWORD
+  ];
+
+  console.log("Received password:", password);
+  console.log("Received file request:", file);
+
+  if (!validPasswords.includes(password)) {
+    console.error("Password mismatch");
+    return {
+      statusCode: 403,
+      body: "Forbidden"
+    };
+  }
+
+  // Select which protected image to return
+  const selectedFile =
+    file === "2" ? "Greymon2.jpg" : "bokay.jpg";
+
+  const imagePath = path.join(__dirname, "protected", selectedFile);
 
   try {
     const imageBuffer = fs.readFileSync(imagePath);
@@ -31,19 +38,10 @@ export async function handler(event) {
       isBase64Encoded: true
     };
   } catch (err) {
-    console.error("Error reading image:", err);
+    console.error("IMAGE READ ERROR:", err);
     return {
       statusCode: 500,
       body: "Error reading image"
     };
   }
 }
-
-
-
-
-
-
-
-
-

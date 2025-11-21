@@ -54,6 +54,11 @@
               console.log("Sound blocked; user interaction needed.");
             });
           }, 3000);
+
+          setTimeout(() => {
+            console.log("Switching to alternate image");
+            imgElem.src = "Greymon2.jpg";   // Replace with your file
+          }, 900000);
         };
 
       }

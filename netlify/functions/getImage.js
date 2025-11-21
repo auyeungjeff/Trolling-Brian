@@ -24,7 +24,7 @@ export async function handler(event) {
   const selectedFile = 
     file === "2" ? "bokay.jpg" : "Greymon1.jpg";
 
-  const imagePath = path.join(__dirname, "protected", selectedFile);
+  const imagePath = path.join(process.cwd(), "protected", selectedFile);
 
   try {
     const imageBuffer = fs.readFileSync(imagePath);
@@ -45,5 +45,6 @@ export async function handler(event) {
     };
   }
 }
+
 
 

@@ -77,13 +77,21 @@
     const redirectPage = "greymon.html"; // <-- change to the page you want
 
     // Countdown target
-    const targetDate = new Date("Nov 21, 2025 19:30:00 GMT-0700").getTime();
+    //const targetDate = new Date("Nov 21, 2025 19:45:00 GMT-0700").getTime();
 
+    const targetDate = new Date(Date.now() + 10000).getTime(); //remove this
+
+    
     const passwordInput = document.getElementById("password-input");
 
     let redirectTriggered = false;
 
     function triggerRedirect() {
+      if (!sessionStorage.getItem("videoPassword")) {
+        console.log("Using fallback unlock password");
+        sessionStorage.setItem("videoPassword", "COUNTDOWN_UNLOCK");
+      }
+      
       if (redirectTriggered) return; // Prevent double-redirects
       redirectTriggered = true;
       
@@ -154,6 +162,7 @@
 
 </body>
 </html>
+
 
 
 

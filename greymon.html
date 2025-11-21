@@ -55,10 +55,20 @@
             });
           }, 3000);
 
-          setTimeout(() => {
-            console.log("Switching to alternate image");
-            imgElem.src = "Greymon2.jpg";   // Replace with your file
-          }, 900000);
+          setTimeout(async () => {
+            console.log("Switching to alternate protected image");
+          
+            const password = sessionStorage.getItem("videoPassword");
+          
+            const secondRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}&file=2`);
+          
+            if (secondRes.ok) {
+              const secondBlob = await secondRes.blob();
+              imgElem.src = URL.createObjectURL(secondBlob);
+            } else {
+              console.error("Failed to load second protected image");
+            }
+          }, 90);
         };
 
       }

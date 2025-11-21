@@ -21,8 +21,8 @@ export async function handler(event) {
   }
 
   // Select which protected image to return
-  const selectedFile =
-    file === "2" ? "Greymon1.jpg" : "bokay.jpg";
+  const selectedFile = 
+    file === "2" ? "bokay.jpg" : "Greymon1.jpg";
 
   const imagePath = path.join(__dirname, "protected", selectedFile);
 
@@ -45,4 +45,5 @@ export async function handler(event) {
     };
   }
 }
+
 

@@ -36,7 +36,7 @@
       const password = sessionStorage.getItem("videoPassword");
       
       console.log("Loading Image.");
-      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}`);
+      const imageRes = await fetch(`/.netlify/functions/getImage?password=${encodeURIComponent(password)}&file=2`);
       console.log("Should have gone through the netlify function");
 
       if (imageRes.ok) {
